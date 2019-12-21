@@ -1,0 +1,41 @@
+{
+  "name": "graphql-backend",
+  "version": "1.0.0",
+  "description": "Graphql backend for practice",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js",
+    "test-server": "TEST_DATABASE=mytestdatabase npm start",
+    "test": "mocha --require @babel/register 'src/**/*.spec.js'"
+  },
+  "keywords": [],
+  "author": "Niroshan Devendran <niroshan.devendran.80@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/register": "^7.7.7",
+    "axios": "^0.19.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.13",
+    "apollo-server-express": "^2.9.13",
+    "bcrypt": "^3.0.7",
+    "cors": "^2.8.5",
+    "dataloader": "^2.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-resolvers": "^0.3.3",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.15.0",
+    "sequelize": "^5.21.3",
+    "uuid": "^3.3.3"
+  }
+}

@@ -1,0 +1,5 @@
+#ignore property files
+*.env
+
+#ignore node downloaded libraries
+node_modules/
