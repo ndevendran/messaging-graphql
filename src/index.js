@@ -18,8 +18,10 @@ const app = express();
 
 app.use(cors());
 
+const port = process.env.PORT || 8000;
 const eraseDatabaseOnSync = true;
 const isTest = !!process.env.TEST_DATABASE;
+const isProduction = !!process.env.DATABASE_URL;
 
 const getMe = async req => {
   const token = req.headers['x-token'];
@@ -84,13 +86,13 @@ const httpServer = http.createServer(app);
 
 server.installSubscriptionHandlers(httpServer);
 
-sequelize.sync({ force: isTest }).then(async () =>
+sequelize.sync({ force: isTest || isProduction }).then(async () =>
 {
-  if (isTest) {
+  if (isTest || isProduction) {
     createUsersWithMessages(new Date());
   }
 
-  httpServer.listen({ port: 8000 }, ()=> {
+  httpServer.listen({ port }, ()=> {
     console.log('Apollo Server on http://localhost:8000/graphql');
   });
 });
