@@ -1,9 +1,14 @@
 import Sequelize from 'sequelize';
 
 let sequelize;
+const Op = Sequelize.Op;
+const operatorsAliases = {
+  $in: Op.in,
+}
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
+    operatorsAliases,
   });
 } else {
   sequelize = new Sequelize(
@@ -12,6 +17,7 @@ if (process.env.DATABASE_URL) {
     process.env.DATABASE_PASSWORD,
     {
       dialect: 'postgres',
+      operatorsAliases,
     },
   );
 }

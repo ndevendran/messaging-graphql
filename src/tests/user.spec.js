@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 
-import * as userApi from './api';
+import api from './api';
+
+const userApi = api.userApi;
 
 describe('users', () => {
   describe('user(id: String!): User', () => {
