@@ -30,6 +30,7 @@ export default gql`
     text: String!
     createdAt: Date!
     user: User!
+    comments: [Comment!]
   }
 
   type MessageCreated {

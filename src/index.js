@@ -88,9 +88,9 @@ const httpServer = http.createServer(app);
 
 server.installSubscriptionHandlers(httpServer);
 
-sequelize.sync({ force: isTest || isProduction }).then(async () =>
+sequelize.sync({ force: isTest }).then(async () =>
 {
-  if (isTest || isProduction) {
+  if (isTest) {
     createUsersWithMessages(new Date());
   }
 
@@ -98,8 +98,6 @@ sequelize.sync({ force: isTest || isProduction }).then(async () =>
     console.log('Apollo Server on http://localhost:8000/graphql');
   });
 });
-
-
 
 const createUsersWithMessages = async date =>
 {

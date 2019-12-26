@@ -6,7 +6,7 @@ const messageApi = api.messageApi;
 const userApi = api.userApi;
 
 describe('messages', () => {
-  describe('message(id:String!) Message', () => {
+  describe('message(id: ID!) Message', () => {
     it('returns message when message can be found', async () => {
       const expectedResult = {
         data: {

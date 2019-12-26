@@ -13,6 +13,7 @@ const message = (sequelize, DataTypes) => {
 
   Message.associate = models => {
     Message.belongsTo(models.User);
+    Message.hasMany(models.Comment, { onDelete: 'CASCADE' });
   };
 
   return Message;

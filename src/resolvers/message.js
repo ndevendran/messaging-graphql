@@ -74,6 +74,13 @@ export default {
     user: async (message, args, { loaders }) => {
       return await loaders.user.load(message.userId);
     },
+    comments: async(message, args, { models }) => {
+      return await models.Comment.findAll({
+        where: {
+          messageId: message.id,
+        }
+      });
+    },
   },
 
   Subscription: {
