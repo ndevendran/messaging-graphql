@@ -1,3 +1,6 @@
+import { isAuthenticated, isCommentOwner } from './authorization';
+import { combineResolvers } from 'graphql-resolvers';
+
 export default {
   Query: {
     comment: async (parent, { id }, { models }) => {
@@ -13,13 +16,15 @@ export default {
   },
 
   Mutation: {
-    createComment: async (parent, { text, messageId }, { me, models}) => {
+    createComment: combineResolvers(
+      isAuthenticated,
+      async (parent, { text, messageId }, { me, models}) => {
       const messageExists = await models.Message.findByPk(messageId);
       if(messageExists) {
         try {
           const comment = await models.Comment.create({
             text: text,
-            userId: 1,
+            userId: me.id,
             messageId: messageId,
           });
 
@@ -31,9 +36,14 @@ export default {
         throw new Error("Cannot create comment. Message doesn't exist");
       }
     },
-    deleteComment: async (parent, { id }, { models }) => {
+  ),
+    deleteComment: combineResolvers(
+      isAuthenticated,
+      isCommentOwner,
+      async (parent, { id }, { models }) => {
       return await models.Comment.destroy({where: { id }});
-    }
+    },
+  ),
   },
 
   Comment: {

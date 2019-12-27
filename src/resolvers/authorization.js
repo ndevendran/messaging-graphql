@@ -25,3 +25,16 @@ export const isMessageOwner = async (
 
   return skip;
 };
+
+export const isCommentOwner = async (
+  parent,
+  { id },
+  { models, me },
+) => {
+  const comment = await models.Comment.findByPk(id, { raw: true });
+  if (comment.userId !== me.id) {
+    throw new ForbiddenError('Not authenticated as owner.');
+  }
+
+  return skip;
+};

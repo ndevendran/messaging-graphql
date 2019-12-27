@@ -109,9 +109,53 @@ export const deleteMessage = async (variables, token) =>
     },
   );
 
+  export const createComment = async (variables, token) =>
+    await axios.post(
+      API_URL,
+      {
+        query: `
+          mutation ($text: String!, $messageId: ID!) {
+            createComment(text: $text, messageId: $messageId) {
+              id
+              text
+              message {
+                id
+              }
+            }
+          }
+        `,
+        variables
+      },
+      {
+        headers: {
+          'x-token': token,
+        },
+      },
+    );
+
+  export const comment = async (variables) =>
+    axios.post(
+      API_URL,
+      {
+        query: `
+          query($id: ID!) {
+            comment(id: $id) {
+              id
+              text
+              message {
+                id
+              }
+            }
+          }
+        `,
+        variables
+      },
+    );
+
 
   const userApi = {user, signIn, deleteUser};
   const messageApi = {message, createMessage, deleteMessage};
-  const api = {userApi, messageApi};
+  const commentApi = {createComment, comment}
+  const api = {userApi, messageApi, commentApi};
 
   export default api;
