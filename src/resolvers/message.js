@@ -68,6 +68,18 @@ export default {
       return await models.Message.destroy({ where: { id }});
       },
     ),
+
+    likeMessage: combineResolvers(
+      isAuthenticated,
+      async (parent, { id }, { models, me }) => {
+        await models.Like.create({
+          userId: me.id,
+          messageId: id,
+        });
+
+        return true;
+      }
+    )
   },
 
   Message: {
@@ -81,6 +93,23 @@ export default {
         }
       });
     },
+    likes:  async(message, args, { me, models }) => {
+      const count = await models.Like.count({
+        where: {
+          messageId: message.id,
+        }
+      });
+
+      const userHasLiked = me ? await models.Like.findOne({
+        where: {
+          messageId: message.id,
+          userId: me.id,
+        }
+      }) : null;
+
+
+      return { count, viewerHasLiked: !!userHasLiked };
+    }
   },
 
   Subscription: {

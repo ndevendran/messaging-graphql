@@ -9,6 +9,7 @@ export default gql`
   extend type Mutation {
     createComment(text: String!, messageId: ID!): Comment!
     deleteComment(id: ID!): Boolean!
+    likeComment(id: ID!): Boolean!
   }
 
   extend type Subscription {
@@ -20,6 +21,7 @@ export default gql`
     text: String!
     createdAt: Date!
     user: User!
+    likes: Likes!
     message: Message!
   }
 

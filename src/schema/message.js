@@ -9,6 +9,7 @@ export default gql`
   extend type Mutation {
     createMessage(text: String!): Message!
     deleteMessage(id: ID!): Boolean!
+    likeMessage(id: ID!): Boolean!
   }
 
   extend type Subscription {
@@ -31,6 +32,7 @@ export default gql`
     createdAt: Date!
     user: User!
     comments: [Comment!]
+    likes: Likes!
   }
 
   type MessageCreated {

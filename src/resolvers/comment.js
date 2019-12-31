@@ -50,6 +50,17 @@ export default {
       return await models.Comment.destroy({where: { id }});
     },
   ),
+  likeComment: combineResolvers(
+    isAuthenticated,
+    async (parent, { id }, { models, me }) => {
+      await models.Like.create({
+        userId: me.id,
+        commentId: id,
+      });
+
+      return true;
+    }
+  ),
   },
 
   Comment: {
@@ -59,8 +70,26 @@ export default {
 
     message: async (comment, args, { models }) => {
       return await models.Message.findByPk(comment.messageId);
+    },
+
+    likes: async (comment, args, { me, models }) => {
+      const count =  await models.Like.count({
+        where: {
+          commentId: comment.id
+        },
+      });
+
+      const userHasLiked = me ? await models.Like.findOne({
+        where: {
+          commentId: comment.id,
+          userId: me.id,
+        }
+      }) : null;
+
+      return { count, viewerHasLiked: !!userHasLiked };
     }
   },
+<<<<<<< HEAD
 
   Subscription: {
     commentCreated: {
@@ -68,3 +97,6 @@ export default {
     },
   },
 };
+=======
+}
+>>>>>>> Added likes for comments

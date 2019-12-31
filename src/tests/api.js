@@ -66,6 +66,29 @@ export const message = async (variables) =>
       variables,
     });
 
+export const messageWithLikes = async (variables) =>
+  axios.post(
+    API_URL,
+    {
+      query: `
+        query($id: ID!) {
+          message(id: $id) {
+            id
+            text
+            likes {
+              count
+              viewerHasLiked
+            }
+            user {
+              id
+              username
+            }
+          }
+        }
+      `,
+      variables
+    });
+
 export const createMessage = async (variables, token) =>
   await axios.post(
     API_URL,
@@ -108,6 +131,24 @@ export const deleteMessage = async (variables, token) =>
       },
     },
   );
+
+  export const likeMessage = async (variables, token) =>
+    axios.post(
+      API_URL,
+      {
+        query: `
+          mutation ($id: ID!) {
+            likeMessage(id: $id)
+          }
+        `,
+        variables,
+      },
+      {
+        headers: {
+          'x-token': token,
+        },
+      },
+    );
 
   export const createComment = async (variables, token) =>
     await axios.post(
@@ -152,10 +193,51 @@ export const deleteMessage = async (variables, token) =>
       },
     );
 
+  export const commentWithLikes = async (variables) =>
+    axios.post(
+      API_URL,
+      {
+        query: `
+          query($id: ID!) {
+            comment(id: $id) {
+              id
+              text
+              likes {
+                count
+                viewerHasLiked
+              }
+              message {
+                id
+              }
+            }
+          }
+        `,
+        variables
+      },
+    );
+
+export const likeComment = async (variables, token) =>
+  axios.post(
+    API_URL,
+    {
+      query: `
+        mutation($id: ID!) {
+          likeComment(id: $id)
+        }
+      `,
+      variables
+    },
+    {
+      headers: {
+        'x-token': token
+      },
+    },
+  );
+
 
   const userApi = {user, signIn, deleteUser};
-  const messageApi = {message, createMessage, deleteMessage};
-  const commentApi = {createComment, comment}
+  const messageApi = {message, createMessage, deleteMessage, messageWithLikes, likeMessage};
+  const commentApi = {createComment, comment, commentWithLikes, likeComment}
   const api = {userApi, messageApi, commentApi};
 
   export default api;

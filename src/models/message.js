@@ -14,6 +14,7 @@ const message = (sequelize, DataTypes) => {
   Message.associate = models => {
     Message.belongsTo(models.User);
     Message.hasMany(models.Comment, { onDelete: 'CASCADE' });
+    Message.hasMany(models.Like, { onDelete: 'CASCADE' });
   };
 
   return Message;
