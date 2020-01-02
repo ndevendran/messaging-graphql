@@ -90,7 +90,6 @@ export default {
       return { count, viewerHasLiked: !!userHasLiked };
     }
   },
-<<<<<<< HEAD
 
   Subscription: {
     commentCreated: {
@@ -98,6 +97,3 @@ export default {
     },
   },
 };
-=======
-}
->>>>>>> Added likes for comments
