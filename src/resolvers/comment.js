@@ -1,4 +1,4 @@
-import { isAuthenticated, isCommentOwner } from './authorization';
+import { isAuthenticated, isCommentOwner, viewerHasLikedComment } from './authorization';
 import { combineResolvers } from 'graphql-resolvers';
 import pubsub, { EVENTS } from '../subscription';
 
@@ -52,6 +52,7 @@ export default {
   ),
   likeComment: combineResolvers(
     isAuthenticated,
+    viewerHasLikedComment,
     async (parent, { id }, { models, me }) => {
       await models.Like.create({
         userId: me.id,

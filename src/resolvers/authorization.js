@@ -38,3 +38,39 @@ export const isCommentOwner = async (
 
   return skip;
 };
+
+export const viewerHasLikedMessage = async (
+  parent,
+  { id },
+  { models, me },
+) => {
+  const result = await models.Like.count({
+    where: {
+      userId: me.id,
+      messageId: id
+    }
+  });
+
+  if(result > 0) {
+    throw new ForbiddenError('Viewer Has Already Liked This Message');
+  }
+
+  return skip;
+};
+
+export const viewerHasLikedComment = async (
+  parent,
+  { id },
+  { models, me },
+) => {
+  const result = await models.Like.count({
+    where: {
+      userId: me.id,
+      commentId: id
+    }
+  });
+
+  if(result > 0) {
+    throw new ForbiddenError('Viewer Has Already Liked This Comment');
+  }
+};

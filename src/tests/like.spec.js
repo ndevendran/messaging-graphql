@@ -94,6 +94,40 @@ describe('Likes', () => {
         const difference = endingCount - startingCount;
         expect(difference).to.eql(1);
     });
+
+    it("User shouldn't be able to like a message twice", async () => {
+      const {
+        data: {
+          data: {
+            message: {
+              likes: {
+                count: startingCount
+              },
+            },
+          },
+        } } = await messageApi.messageWithLikes({id: 2});
+
+        console.log(`This is the message starting count: ${startingCount}`);
+
+        await messageApi.likeMessage({id: 2}, token);
+        await messageApi.likeMessage({id: 2}, token);
+
+        const {
+          data: {
+            data: {
+              message: {
+                likes: {
+                  count: endingCount
+                },
+              },
+            },
+          }} = await messageApi.messageWithLikes({id: 2});
+
+        console.log(`This is the message ending count: ${endingCount}`);
+
+        const difference = endingCount - startingCount;
+        expect(difference).to.eql(1);
+    });
   });
 
   describe('Likes for Comments', () => {
@@ -123,10 +157,7 @@ describe('Likes', () => {
         }
       } = await commentApi.commentWithLikes({id: commentId});
 
-      console.log(`This is the starting count: ${startingCount}`);
-
       const result = await commentApi.likeComment({id: commentId}, token);
-      console.log(result.data);
       expect(result.data.data.likeComment).to.eql(true);
 
       const {
@@ -141,9 +172,52 @@ describe('Likes', () => {
         }
       } = await commentApi.commentWithLikes({id: commentId});
 
-      console.log(`This is the ending count: ${endingCount}`);
+      const difference = endingCount - startingCount;
+      expect(difference).to.eql(1);
+    });
+
+    it("User shouldn't be able to like a comment twice", async () => {
+      const {
+        data: {
+          data: {
+            createComment: {
+              id: commentId
+            }
+          }
+        }
+      } = await commentApi.createComment({
+        text: 'Another comment!',
+        messageId: 1,
+      }, token);
+
+      const {
+        data: {
+          data: {
+            comment: {
+              likes: {
+                count: startingCount
+              }
+            }
+          }
+        }
+      } = await commentApi.commentWithLikes({id: commentId});
+
+      await commentApi.likeComment({id: commentId}, token);
+      const result = await commentApi.likeComment({id: commentId}, token);
+      const {
+        data: {
+          data: {
+            comment: {
+              likes: {
+                count: endingCount
+              }
+            }
+          }
+        }
+      } = await commentApi.commentWithLikes({id: commentId});
 
       const difference = endingCount - startingCount;
+
       expect(difference).to.eql(1);
     });
   });

@@ -1,6 +1,6 @@
 import { ForbiddenError } from 'apollo-server';
 import { combineResolvers } from 'graphql-resolvers';
-import { isAuthenticated, isMessageOwner } from './authorization';
+import { isAuthenticated, isMessageOwner, viewerHasLikedMessage } from './authorization';
 import Sequelize from 'sequelize';
 import pubsub, { EVENTS } from '../subscription';
 
@@ -71,6 +71,7 @@ export default {
 
     likeMessage: combineResolvers(
       isAuthenticated,
+      viewerHasLikedMessage,
       async (parent, { id }, { models, me }) => {
         await models.Like.create({
           userId: me.id,
