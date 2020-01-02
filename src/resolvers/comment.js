@@ -1,5 +1,6 @@
 import { isAuthenticated, isCommentOwner } from './authorization';
 import { combineResolvers } from 'graphql-resolvers';
+import pubsub, { EVENTS } from '../subscription';
 
 export default {
   Query: {
@@ -28,6 +29,11 @@ export default {
             messageId: messageId,
           });
 
+          pubsub.publish(EVENTS.COMMENT.CREATED,
+          {
+            commentCreated: { comment },
+          });
+
           return comment;
         } catch (error) {
           throw new Error(error);
@@ -54,5 +60,11 @@ export default {
     message: async (comment, args, { models }) => {
       return await models.Message.findByPk(comment.messageId);
     }
-  }
-}
+  },
+
+  Subscription: {
+    commentCreated: {
+      subscribe:() => pubsub.asyncIterator(EVENTS.COMMENT.CREATED),
+    },
+  },
+};

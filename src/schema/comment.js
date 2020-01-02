@@ -11,11 +11,19 @@ export default gql`
     deleteComment(id: ID!): Boolean!
   }
 
+  extend type Subscription {
+    commentCreated: CommentCreated!
+  }
+
   type Comment {
     id: ID!
     text: String!
     createdAt: Date!
     user: User!
     message: Message!
+  }
+
+  type CommentCreated {
+    comment: Comment!
   }
 `;
