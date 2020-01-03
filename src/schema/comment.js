@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express'
 export default gql`
   extend type Query {
     comment(id: ID!): Comment
-    comments(messageId: ID!): [Comment!]
+    comments(cursor: String, limit: Int, messageId: ID!): CommentConnection!
   }
 
   extend type Mutation {
@@ -23,6 +23,11 @@ export default gql`
     user: User!
     likes: Likes!
     message: Message!
+  }
+
+  type CommentConnection {
+    edges: [Comment!]
+    pageInfo: PageInfo!
   }
 
   type CommentCreated {

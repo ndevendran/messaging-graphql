@@ -27,6 +27,20 @@ describe('messages', () => {
 
   });
 
+  describe('messages(id: ID!) MessageConnection!', () => {
+    it('returns paginated messages when messages can be found', async () => {
+      const result = await messageApi.messages({limit: 100});
+
+      const edges = result.data.data.messages.edges;
+      const pageInfo = result.data.data.messages.pageInfo;
+
+      expect(pageInfo.hasNextPage).to.eql(false);
+      expect(edges).to.not.eql([]);
+      expect(edges[0].id).to.not.eql(null);
+      expect(edges[0].text).to.not.eql(null);
+    });
+  });
+
   describe('createMessage(text: String!) Message', () => {
     it('creates a message for signed in user', async () => {
       const {

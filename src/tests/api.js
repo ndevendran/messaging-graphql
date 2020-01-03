@@ -66,6 +66,28 @@ export const message = async (variables) =>
       variables,
     });
 
+export const messages = async (variables) =>
+  axios.post(
+    API_URL,
+    {
+      query: `
+        query($limit: Int!) {
+          messages(limit: $limit) {
+            edges {
+              id
+              text
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `,
+      variables
+    });
+
+
 export const messageWithLikes = async (variables) =>
   axios.post(
     API_URL,
@@ -193,6 +215,28 @@ export const deleteMessage = async (variables, token) =>
       },
     );
 
+  export const comments = async (variables) =>
+    axios.post(
+      API_URL,
+      {
+        query:`
+          query($messageId: ID!, $limit: Int, $cursor: String) {
+            comments(messageId: $messageId, limit: $limit, cursor: $cursor) {
+              edges {
+                id
+                text
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
+          }
+        `,
+        variables
+      },
+    );
+
   export const commentWithLikes = async (variables) =>
     axios.post(
       API_URL,
@@ -236,8 +280,8 @@ export const likeComment = async (variables, token) =>
 
 
   const userApi = {user, signIn, deleteUser};
-  const messageApi = {message, createMessage, deleteMessage, messageWithLikes, likeMessage};
-  const commentApi = {createComment, comment, commentWithLikes, likeComment}
+  const messageApi = {message, messages, createMessage, deleteMessage, messageWithLikes, likeMessage};
+  const commentApi = {createComment, comment, comments, commentWithLikes, likeComment}
   const api = {userApi, messageApi, commentApi};
 
   export default api;
